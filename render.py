@@ -27,7 +27,7 @@ news_items = NewsItem.select().where(NewsItem.published_ts>three_days_ago_ts)
 news_items.order_by(NewsItem.published_ts)
 
 # Render the template
-context = {'news_items': news_items, 'updated_utc': arrow.utcnow() }
+context = {'news_items': news_items, 'updated_eastern': arrow.utcnow().to('US/Eastern') }
 output = template.render(context)
 
 # Save the output

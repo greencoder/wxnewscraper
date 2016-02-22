@@ -80,7 +80,7 @@ footer {
 {% endfor %}
 
 <footer>
-Last Update {{ updated_utc.format('YYYY-MM-DD HH:mm:ss ZZ') }}
+Last Update {{ updated_eastern.format('YYYY-MM-DD HH:mm:ss') }} {{ updated_eastern.datetime.strftime('%Z') }}
 </footer>
 
 </body>
