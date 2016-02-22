@@ -32,10 +32,12 @@ for article_el in article_els:
         print 'Creating new item.'
         item = NewsItem()
 
-    headline = unidecode.unidecode(article_el.h3.a.text)
     date = article_el.find('div', class_='entry-meta').p.text.replace('|', '')
     dt = dateutil.parser.parse(date).replace(tzinfo=pytz.timezone('US/Eastern'))
     published_ts = arrow.get(dt).to('UTC').timestamp
+    published_date = arrow.get(dt).date().strftime('%Y-%m-%d')
+    
+    headline = unidecode.unidecode(article_el.h3.a.text)
     summary = article_el.find('div', class_='entry-content').text.strip()
     summary = unidecode.unidecode(summary)
 
@@ -43,8 +45,8 @@ for article_el in article_els:
     item.url_hash = url_hash
     item.title = headline
     item.summary = summary
-    item.authors = ''
     item.source = 'NY Post'
+    item.published_date = published_date
     item.published_ts = published_ts
     item.inserted_ts = arrow.utcnow().timestamp
 

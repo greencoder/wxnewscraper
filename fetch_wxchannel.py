@@ -37,13 +37,18 @@ for entry in data:
         print 'Creating new item.'
         item = NewsItem()
     
+    date = arrow.get(entry['publishdate'])
+    dt = date.to('US/Eastern')
+    published_ts = dt.timestamp
+    published_date = dt.date().strftime('%Y-%m-%d')
+    
     item.url_hash = url_hash
     item.title = unidecode.unidecode(entry['title'].strip())
-    item.authors = ", ".join(entry['author'])
     item.summary = unidecode.unidecode(entry['description'].strip())
     item.source = "Weather Channel"
     item.link = link
-    item.published_ts = arrow.get(entry['publishdate']).timestamp
+    item.published_date = published_date
+    item.published_ts = published_ts
     item.inserted_ts = arrow.utcnow().timestamp
 
     item.save()

@@ -17,9 +17,10 @@ for li_el in li_els:
 
     headline = li_el.h3.text.strip()
     description = li_els[0].find('meta', {'itemprop': 'description'})['content'].strip()
-    author = '' # No Author Info for this Feed
     link = li_el.h3.a['href'].strip()
     date = li_el.find('meta', {'itemprop': 'datePublished'})['content']
+
+    published_date = arrow.get(date).to('US/Eastern').date().strftime('%Y-%m-%d')
 
     # Make sure the link is absolute
     if not link.startswith('http'):
@@ -39,12 +40,12 @@ for li_el in li_els:
     
     item.url_hash = url_hash
     item.title = headline
-    item.authors = author
     item.summary = description
     item.source = "Fox News"
     item.link = link
-    item.published_ts = arrow.get(date).timestamp
-    item.inserted_ts = arrow.utcnow().timestamp
+    item.published_date = published_date
+    item.published_ts = arrow.get(date).to('UTC').timestamp
+    item.inserted_ts = arrow.utcnow().to('UTC').timestamp
 
     item.save()
     

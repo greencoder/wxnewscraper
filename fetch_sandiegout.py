@@ -11,15 +11,16 @@ import unidecode
 
 from models import NewsItem
 
-source_url = 'http://www.startribune.com/weather/'
+source_url = 'http://www.sandiegouniontribune.com/news/weather/'
 request = requests.get(source_url)
 soup = bs4.BeautifulSoup(request.text, 'html.parser')
-h3_el = soup.find('h3', text='Weather News')
-div_els = h3_el.findAllNext('div', class_='tease')
+article_els = soup.findAll('article', class_='story_list span3 col')
 
-for div_el in div_els:
+for article_el in article_els:
 
-    link = div_el.find('div', class_='tease-container-right').h3.a['href']
+    div_el = article_el.find('div', class_='content')
+
+    link = 'http://www.sandiegouniontribune.com/news/weather/' + div_el.a['href']
     
     # Create a hash from the URL to make a unique identifier
     url_hash = hashlib.md5(link).hexdigest()
@@ -33,20 +34,24 @@ for div_el in div_els:
         print 'Creating new item.'
         item = NewsItem()
 
-    date = div_el.find('div', class_='tease-timestamp')['data-st-timestamp']
-    published_ts = arrow.get(date).timestamp
-    published_date = arrow.get(date).date().strftime('%Y-%m-%d')
+    date = div_el.find('p', class_='date').text.replace('Updated', '').strip()
+    dt = dateutil.parser.parse(date)
+    dt = dt.replace(tzinfo=pytz.timezone('US/Pacific'))
+    published_date = arrow.get(dt).date().strftime('%Y-%m-%d')
 
-    headline = div_el.find('div', class_='tease-container-right').h3.text.strip()
-    summary = div_el.find('div', class_='tease-summary').text.strip()
+    headline = div_el.a.text.strip()
+    published_ts = arrow.get(dt).to('UTC').timestamp
+    summary = ''
 
     item.link = link 
     item.url_hash = url_hash
     item.title = headline
     item.summary = summary
-    item.source = 'Star Tribune'
+    item.source = 'San Diego Union Tribune'
     item.published_date = published_date
     item.published_ts = published_ts
     item.inserted_ts = arrow.utcnow().timestamp
 
     item.save()
+
+

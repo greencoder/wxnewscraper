@@ -22,12 +22,12 @@ for ul_el in ul_els:
     headline = li_el.find('h4').text
     date = li_el.find('h5').text
     description = li_el.find('p').text
-    author = '' # No Author Info Available
     
     # Parse the date
     dt = dateutil.parser.parse(date)
     dt = dt.replace(tzinfo=pytz.timezone('US/Eastern'))
     utc_dt = arrow.get(dt).to('UTC')
+    published_date = arrow.get(dt).date().strftime('%Y-%m-%d')
     
     # Create a unique identifier from the hash of the URL
     url_hash = hashlib.md5(link).hexdigest()
@@ -43,10 +43,10 @@ for ul_el in ul_els:
     
     item.url_hash = url_hash
     item.title = headline
-    item.authors = author
     item.summary = description
     item.source = "Accuweather"
     item.link = link
+    item.published_date = published_date
     item.published_ts = utc_dt.timestamp
     item.inserted_ts = arrow.utcnow().timestamp
 

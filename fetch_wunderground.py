@@ -46,17 +46,18 @@ for tr_el in tr_els:
     parts = tr_el.em.text.strip().split('\n\t\t')
     
     if len(parts) == 1:
-        item.authors = ''
         dt = dateutil.parser.parse(parts[0])
         dt = dt.replace(tzinfo=pytz.timezone('US/Eastern')).strftime('%Y-%m-%d') + 'T00:00:00-05:00'
         timestamp = arrow.get(dt).to('UTC').timestamp
+        published_date = arrow.get(dt).date().strftime('%Y-%m-%d')
         item.published_ts = timestamp
     else:
-        item.authors = parts[0]
         dt = dateutil.parser.parse(parts[1])
         dt = dt.replace(tzinfo=pytz.timezone('US/Eastern')).strftime('%Y-%m-%d') + 'T00:00:00-05:00'
         timestamp = arrow.get(dt).to('UTC').timestamp
+        published_date = arrow.get(dt).date().strftime('%Y-%m-%d')
         item.published_ts = timestamp
 
+    item.published_date = published_date
     item.inserted_ts = arrow.utcnow().timestamp
     item.save()

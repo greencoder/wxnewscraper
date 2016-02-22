@@ -7,23 +7,23 @@ CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 
 from models import NewsItem
 
-def mmddyyyy_from_timestamp(timestamp):
-    return arrow.get(timestamp).to('US/Eastern').format('MM/DD/YYYY')
+def reformat_date(datestring):
+    return arrow.get(datestring).format('dddd, MMMM D, YYYY')
 
 # Set up the template engine to look in the current directory
 template_loader = jinja2.FileSystemLoader('templates')
 template_env = jinja2.Environment(loader=template_loader)
 
 # Adding filters to enviroment to make them visible in the template
-template_env.filters['format_date'] = mmddyyyy_from_timestamp
+template_env.filters['format_date'] = reformat_date
 
 # Load the template file
 template_file = "index.tpl.html"
 template = template_env.get_template(template_file)
 
 # Load all the news items
-three_days_ago_ts = arrow.utcnow().ceil('hour').replace(days=-2).timestamp
-news_items = NewsItem.select().where(NewsItem.published_ts>three_days_ago_ts)
+three_days_ago = arrow.utcnow().to('US/Eastern').replace(hours=-72).format('YYYY-MM-DD')
+news_items = NewsItem.select().where(NewsItem.published_date > three_days_ago)
 news_items.order_by(NewsItem.published_ts)
 
 # Render the template

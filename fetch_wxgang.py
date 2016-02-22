@@ -16,7 +16,10 @@ for entry in feed.entries:
     link = entry.link
     url_hash = hashlib.md5(link).hexdigest()
     date = entry.published_parsed
-    
+
+    published_date = arrow.get(date).to('US/Eastern').date().strftime('%Y-%m-%d')
+    published_ts = arrow.get(date).to('UTC').timestamp
+
     # See if we already have this story
     try:
         NewsItem.get(NewsItem.url_hash==url_hash)
@@ -34,7 +37,8 @@ for entry in feed.entries:
     item.link = link
     item.authors = ''
     item.source = 'Capital WX Gang'
-    item.published_ts = arrow.get(date).to('UTC').timestamp
+    item.published_date = published_date
+    item.published_ts = published_ts
     item.inserted_ts = arrow.utcnow().timestamp
 
     item.save()

@@ -18,6 +18,7 @@ body {
 a {
     text-decoration: none;
     color: #000;
+    color: #336699;
 }
 p {
     margin-top: 6px;
@@ -32,6 +33,7 @@ h1 {
     padding: 8px;
     font-size: 1.6em;
     font-weight; bold;
+    color: #333333;
 }
 h2 {
     font-size: 1.4em;
@@ -59,9 +61,9 @@ footer {
 </head>
 
 <body>
-{% for day, day_group in news_items|groupby('published_date_eastern')|reverse %}
+{% for day, day_group in news_items|groupby('published_date')|reverse %}
     <section>
-        <h1>{{ day }}</h1>
+        <h1>{{ day|format_date }}</h1>
         <hr/>
         {% for news_item in day_group|sort(attribute='published_ts', reverse=True) %}
         <article id="{{ news_item.id }}">

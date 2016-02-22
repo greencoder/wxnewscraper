@@ -4,6 +4,7 @@
 
     {% for news_item in sources[source_key]['items'] %}
         {{ news_item.title }}
+        {{ news_item.published_date }}
         {{ news_item.published_ts }}
     {% endfor %}
 
