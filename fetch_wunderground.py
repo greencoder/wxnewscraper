@@ -4,6 +4,7 @@ import datetime
 import dateutil.parser
 import hashlib
 import peewee
+import pytz
 import requests
 import sys
 
@@ -17,10 +18,6 @@ h1_el = soup.find('h1', text='Weather Articles')
 tr_els = h1_el.findAllNext('tr')
 
 for tr_el in tr_els:
-    
-    # If there is no hyperlink, skip it
-    if tr_el.a == None:
-        continue
     
     # Make sure the URL is absolute
     link = tr_el.a['href'].strip()
@@ -50,11 +47,15 @@ for tr_el in tr_els:
     
     if len(parts) == 1:
         item.authors = ''
-        timestamp = arrow.get(dateutil.parser.parse(parts[0])).timestamp
+        dt = dateutil.parser.parse(parts[0])
+        dt = dt.replace(tzinfo=pytz.timezone('US/Eastern')).strftime('%Y-%m-%d') + 'T00:00:00-05:00'
+        timestamp = arrow.get(dt).to('UTC').timestamp
         item.published_ts = timestamp
     else:
         item.authors = parts[0]
-        timestamp = arrow.get(dateutil.parser.parse(parts[1])).timestamp
+        dt = dateutil.parser.parse(parts[1])
+        dt = dt.replace(tzinfo=pytz.timezone('US/Eastern')).strftime('%Y-%m-%d') + 'T00:00:00-05:00'
+        timestamp = arrow.get(dt).to('UTC').timestamp
         item.published_ts = timestamp
 
     item.inserted_ts = arrow.utcnow().timestamp

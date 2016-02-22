@@ -64,7 +64,7 @@ footer {
         <h1>{{ day }}</h1>
         <hr/>
         {% for news_item in day_group|sort(attribute='published_ts', reverse=True) %}
-        <article>
+        <article id="{{ news_item.id }}">
             <h2><a href="{{ news_item.link }}">{{ news_item.title|trim }}</a></h2>
             <h3><strong>{{ news_item.source }}</strong>, {{ news_item.published_datetime_eastern }}</h3>
             <p>{{ news_item.summary|striptags }}</p>

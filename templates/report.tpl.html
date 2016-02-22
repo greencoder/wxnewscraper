@@ -1,0 +1,10 @@
+{% for source_key in sources.keys() %}
+
+{{ sources[source_key]['name'] }}
+
+    {% for news_item in sources[source_key]['items'] %}
+        {{ news_item.title }}
+        {{ news_item.published_ts }}
+    {% endfor %}
+
+{% endfor %}
