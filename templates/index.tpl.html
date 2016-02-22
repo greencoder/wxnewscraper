@@ -61,7 +61,7 @@ article {
 <h1>{{ day }}</h1>
 <hr/>
 
-	{% for news_item in day_group %}
+	{% for news_item in day_group|sort(attribute='published_ts', reverse=True) %}
 	<article>
 
 		<h2><a href="{{ news_item.link }}">{{ news_item.title }}</a></h2>
