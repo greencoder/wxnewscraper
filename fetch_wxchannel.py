@@ -4,11 +4,12 @@ import hashlib
 import peewee
 import requests
 import sys
+import unidecode
 
 from models import NewsItem
 
 url  = 'https://dsx.weather.com/cms/v1/a/?api=00728e87-7005-4043-9050-c84d5e7d8ca6'
-url += '&pg=0,50'
+url += '&pg=0,25'
 #url += '&q=type:$in(%27article%27);tags.keyword:$in(%27TopStory%27)'
 url += '&q=type:$in(%27article%27)'
 url += '&sort=-lastmodifieddate'
@@ -37,40 +38,12 @@ for entry in data:
         item = NewsItem()
     
     item.url_hash = url_hash
-    item.title = entry['title']
+    item.title = unidecode.unidecode(entry['title'].strip())
     item.authors = ", ".join(entry['author'])
-    item.summary = entry['description']
+    item.summary = unidecode.unidecode(entry['description'].strip())
     item.source = "Weather Channel"
     item.link = link
     item.published_ts = arrow.get(entry['publishdate']).timestamp
     item.inserted_ts = arrow.utcnow().timestamp
 
     item.save()
-    
-# u'source_name',
-# u'teaserTitle',
-# u'locale',
-# u'lastmodifieddate',
-# u'publishdate',
-# u'id',
-# u'wxnodes',
-# u'source_guid',
-# u'title',
-# u'schema_version',
-# u'adsmetrics',
-# u'seometa',
-# u'type',
-# u'body',
-# u'description',
-# u'providername',
-# u'tags',
-# u'createdate',
-# u'providerid',
-# u'variants',
-# u'url',
-# u'author',
-# u'pcollid',
-# u'flags',
-# u'assetName'
-
-    
