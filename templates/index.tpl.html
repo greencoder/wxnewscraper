@@ -1,0 +1,78 @@
+<!doctype html>
+<html charset='UTF-8'>
+<head>
+<title>Weather Stories</title>
+<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<style>
+h1, h2, h3, h4, h5, p {
+    margin: 0px;
+    padding: 0px;
+}
+html {
+    font-family: "PT Serif", Georgia, "Times New Roman", serif;
+}
+body {
+    background-color: #efefef;
+    margin: 10px;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+p {
+    margin-top: 6px;
+    font-size: 1.1em;
+}
+hr {
+    border: 0;
+    border-bottom: 1px dashed #efefef;
+    background: #ccc;
+}
+h1 {
+    padding: 8px;
+    font-size: 1.6em;
+    font-weight; bold;
+}
+h2 {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+h3 {
+    font-size: 0.9em;
+    margin-top: 5px;
+    font-weight: normal;
+}
+section {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+article {
+    padding: 10px 5px 20px 5px;
+}
+</style>
+</head>
+<body>
+
+{% for day, day_group in news_items|groupby('published_date_eastern')|reverse %}
+
+<section>
+
+<h1>{{ day }}</h1>
+<hr/>
+
+	{% for news_item in day_group %}
+	<article>
+
+		<h2><a href="{{ news_item.link }}">{{ news_item.title }}</a></h2>
+		<h3><strong>{{ news_item.source }}</strong>, {{ news_item.published_datetime_eastern }}</h3>
+		<p>{{ news_item.summary|striptags }}</p>
+
+	</article>
+	{% endfor %}
+
+</section>
+{% endfor %}
+	
+</body>
+</html>
