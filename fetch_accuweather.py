@@ -6,6 +6,7 @@ import peewee
 import pytz
 import requests
 import sys
+import time
 
 from models import NewsItem
 
@@ -40,14 +41,38 @@ for ul_el in ul_els:
     except peewee.DoesNotExist:
         print 'Creating new item.'
         item = NewsItem()
+
+    # Try to get the opengraph data
+    try:
+        link_request = requests.get(link)
+        links_soup = bs4.BeautifulSoup(link_request.text, 'html.parser')
+        meta_og_title_el = links_soup.find('meta', {'property': 'og:title'})
+        meta_og_desc_el = links_soup.find('meta', {'property': 'og:description'})
+        meta_og_url_el = links_soup.find('meta', {'property': 'og:url'})
+    except Exception, e:
+        meta_og_title_el = None
+        meta_og_desc_el = None
+        meta_og_url_el = None
+
+    if meta_og_title_el is not None:
+        headline = meta_og_title_el['content'].strip()
+
+    if meta_og_desc_el is not None:
+        description = meta_og_desc_el['content'].strip()
+        
+    if meta_og_url_el is not None:
+        link = meta_og_url_el['content']
     
+    item.link = link
     item.url_hash = url_hash
     item.title = headline
     item.summary = description
     item.source = "Accuweather"
-    item.link = link
     item.published_date = published_date
     item.published_ts = utc_dt.timestamp
     item.inserted_ts = arrow.utcnow().timestamp
 
     item.save()
+    
+    # Sleep between requests
+    time.sleep(1)
