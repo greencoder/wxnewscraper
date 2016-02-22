@@ -8,7 +8,7 @@ CUR_DIR = os.path.dirname(os.path.realpath(__file__))
 from models import NewsItem
 
 def reformat_date(datestring):
-    return arrow.get(datestring).format('dddd, MMMM D, YYYY')
+    return arrow.get(datestring).format('dddd, MMM. D, YYYY')
 
 # Set up the template engine to look in the current directory
 template_loader = jinja2.FileSystemLoader('templates')
