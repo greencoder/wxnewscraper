@@ -50,6 +50,11 @@ section {
 article {
     padding: 10px 5px 20px 5px;
 }
+footer { 
+    padding: 10px;
+    text-align: left;
+    font-size: 0.8em;
+}
 </style>
 </head>
 <body>
@@ -73,6 +78,10 @@ article {
 
 </section>
 {% endfor %}
-	
+
+<footer>
+Last Update {{ updated_utc.format('YYYY-MM-DD HH:mm:ss ZZ') }}
+</footer>
+
 </body>
 </html>
