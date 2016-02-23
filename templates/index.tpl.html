@@ -1,8 +1,9 @@
 <!doctype html>
 <html charset='UTF-8'>
 <head>
-<title>Weather Stories</title>
+<title>Weather News</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes" />
+<link rel="apple-touch-icon" href="icon.png">
 <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
 <style>
 h1, h2, h3, h4, h5, p {
@@ -59,9 +60,18 @@ footer {
     font-size: 0.8em;
 }
 header {
-    width: 100%;
     text-align: center;
     padding: 10px;
+}
+@media (max-width: 1024px) {
+  body {
+      margin: 10px;
+  }
+}
+@media (min-width: 1025px) {
+  body {
+      margin: 10px 80px 10px 80px;
+  }
 }
 </style>
 </head>
