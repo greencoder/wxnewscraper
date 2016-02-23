@@ -58,10 +58,19 @@ footer {
     text-align: left;
     font-size: 0.8em;
 }
+header {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
 </style>
 </head>
 
 <body>
+
+    <header>
+        <img src="logo.svg" width="300px" />
+    </header>
 {% for day, day_group in news_items|groupby('published_date')|reverse %}
     <section>
         <h1>{{ day|format_date }}</h1>
