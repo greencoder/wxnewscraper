@@ -36,7 +36,8 @@ for div_el in div_els:
 
     date = div_el.find('div', class_='tease-timestamp')['data-st-timestamp']
     published_ts = arrow.get(date).timestamp
-    published_date = arrow.get(date).date().strftime('%Y-%m-%d')
+    published_date = arrow.get(date).to('US/Central').date().strftime('%Y-%m-%d')
+    
     summary = div_el.find('div', class_='tease-summary').text.strip()
     headline = div_el.find('div', class_='tease-container-right').h3.text.strip()
     
