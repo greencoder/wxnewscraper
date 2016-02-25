@@ -17,10 +17,13 @@ body {
     background-color: #efefef;
     margin: 10px;
 }
-a {
+a.title {
+    text-decoration: none;
+    color: #336699;
+}
+a.source {
     text-decoration: none;
     color: #000;
-    color: #336699;
 }
 p {
     margin-top: 6px;
@@ -87,8 +90,8 @@ header {
         <hr/>
         {% for news_item in day_group|sort(attribute='published_ts', reverse=True) %}
         <article id="{{ news_item.id }}">
-            <h2><a href="{{ news_item.link }}">{{ news_item.title.encode('ascii', 'xmlcharrefreplace')|trim }}</a></h2>
-            <h3><strong>{{ news_item.source }}</strong>, {{ news_item.published_datetime_eastern }}</h3>
+            <h2><a class="title" href="{{ news_item.link }}">{{ news_item.title.encode('ascii', 'xmlcharrefreplace')|trim }}</a></h2>
+            <h3><strong><a class="source" href="{{ news_item.source|get_source_url }}">{{ news_item.source }}</a></strong>, {{ news_item.published_datetime_eastern }}</h3>
             <p>{{ news_item.summary.encode('ascii', 'xmlcharrefreplace') }}</p>
         </article>
         {% endfor %}
