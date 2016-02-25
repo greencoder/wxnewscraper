@@ -28,6 +28,37 @@ for entry in data:
     # Create a unique identifier from the hash of the URL
     url_hash = hashlib.md5(link).hexdigest()
     
+    date = arrow.get(entry['publishdate'])
+    dt = date.to('US/Eastern')
+    published_ts = dt.timestamp
+    published_date = dt.date().strftime('%Y-%m-%d')
+
+    pcollid = entry['pcollid']
+
+    if entry['tags']:
+        tags = entry['tags']['keyword']
+    else:
+        tags = []
+
+    # Skip lame stories
+    
+    skippable_collection_ids = (
+        'health/allergy',
+        'photos/places',
+        'tv/shows/responding-by-storm',
+        'travel',
+    )
+    
+    # See if any of the skippable ids are in the story ids
+    if pcollid in skippable_collection_ids:
+        print 'Skipping %s story' % pcollid
+        continue
+
+    # If it's also published on weather underground, skip it
+    if 'wunderground' in tags:
+        print 'Skipping Weather Underground Story'
+        continue
+
     # See if the story already exists
     try:
         item = NewsItem.get(NewsItem.url_hash==url_hash)
@@ -36,12 +67,7 @@ for entry in data:
     except peewee.DoesNotExist:
         print 'Creating new item.'
         item = NewsItem()
-    
-    date = arrow.get(entry['publishdate'])
-    dt = date.to('US/Eastern')
-    published_ts = dt.timestamp
-    published_date = dt.date().strftime('%Y-%m-%d')
-    
+
     item.url_hash = url_hash
     item.title = unidecode.unidecode(entry['title'].strip())
     item.summary = unidecode.unidecode(entry['description'].strip())
