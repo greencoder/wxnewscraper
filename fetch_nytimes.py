@@ -37,6 +37,10 @@ for entry in feed.entries:
     headline = entry.title
     summary = entry.summary
 
+    # Strip out any inline html
+    summary_soup = bs4.BeautifulSoup(summary, 'html.parser')
+    summary = summary_soup.text
+
     item.url_hash = url_hash
     item.link = link
     item.source = 'NY Times'
