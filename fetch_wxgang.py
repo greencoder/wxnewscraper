@@ -20,8 +20,19 @@ for entry in feed.entries:
     published_date = arrow.get(date).to('US/Eastern').date().strftime('%Y-%m-%d')
     published_ts = arrow.get(date).to('UTC').timestamp
 
+    skippable_headline_prefixes = (
+        'D.C. area forecast',
+        'PM Update',
+    )
+
     # Skip the story if it starts with "D.C. area forecast"
-    if entry.title.startswith('D.C. area forecast'):
+    prefix_match = False
+    for prefix in skippable_headline_prefixes:
+        if entry.title.startswith(prefix):
+            prefix_match = True
+    
+    if prefix_match:
+        print 'Skipping story'
         continue
     
     # See if we already have this story
