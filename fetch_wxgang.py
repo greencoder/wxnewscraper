@@ -20,6 +20,10 @@ for entry in feed.entries:
     published_date = arrow.get(date).to('US/Eastern').date().strftime('%Y-%m-%d')
     published_ts = arrow.get(date).to('UTC').timestamp
 
+    # Skip the story if it starts with "D.C. area forecast"
+    if entry.title.startswith('D.C. area forecast'):
+        continue
+    
     # See if we already have this story
     try:
         NewsItem.get(NewsItem.url_hash==url_hash)
