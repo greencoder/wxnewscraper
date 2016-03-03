@@ -41,6 +41,13 @@ for story_dict in stories:
     date_utc = date_eastern.to('UTC')
     published_date = date_eastern.format('YYYY-MM-DD')
     published_ts = date_utc.timestamp
+    
+    # If the datetime indicates midnight, default it to the current time, at
+    # least it will be closer to accurate since we check every 30 minutes
+    if date_eastern.hour == 0 and date_eastern.minute == 0:
+        print 'Overriding timestamp'
+        date_utc = arrow.utcnow()
+        published_ts = date_utc.timestamp
 
     headline = story_dict['Title']['Text'][0]
     summary = story_dict['IntroText']['Text'][0]
