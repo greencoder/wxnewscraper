@@ -40,6 +40,11 @@ for entry in data:
     else:
         tags = []
 
+    # Skip non weather.com stories
+    if entry['providername'] != 'weather.com':
+        print 'Skipping non weather.com story: %s' % entry['providername']
+        continue
+
     # Skip lame stories
     
     skippable_collection_ids = (
