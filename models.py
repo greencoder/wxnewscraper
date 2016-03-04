@@ -19,16 +19,12 @@ class NewsItem(BaseModel):
     published_date = peewee.CharField()
     published_ts = peewee.IntegerField()
     inserted_ts = peewee.IntegerField()
+    hidden = peewee.BooleanField(default=False)
 
     @property
     def published_datetime_eastern(self):
         dt = arrow.get(self.published_ts).to('US/Eastern')
         return '%s %s' % (dt.format('MM/DD/YYYY h:mm a'), dt.datetime.strftime('%Z'))
-
-    # @property
-    # def published_date_eastern(self):
-    #     dt = arrow.get(self.published_ts).to('US/Eastern').floor('day')
-    #     return dt.format('MM/DD/YYYY')
 
     def __repr__(self):
         return self.title

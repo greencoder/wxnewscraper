@@ -51,7 +51,10 @@ template = template_env.get_template(template_file)
 
 # Load all the news items
 three_days_ago = arrow.utcnow().to('US/Eastern').replace(hours=-72).format('YYYY-MM-DD')
-news_items = NewsItem.select().where(NewsItem.published_date > three_days_ago)
+news_items = NewsItem.select().where(
+    NewsItem.published_date > three_days_ago,
+    NewsItem.hidden == 0
+)
 news_items.order_by(NewsItem.published_ts)
 
 # Render the template
