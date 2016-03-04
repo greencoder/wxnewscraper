@@ -86,6 +86,10 @@ for tr_el in tr_els:
         published_date = arrow.get(dt).date().strftime('%Y-%m-%d')
         item.published_ts = timestamp
 
+    # Stories are posted without times, so we just assign the current time to the story
+    # since we check every 30 minutes. It's better than showing every story as midnight
+    item.published_ts = arrow.utcnow().timestamp
+
     item.published_date = published_date
     item.inserted_ts = arrow.utcnow().timestamp
     item.save()
