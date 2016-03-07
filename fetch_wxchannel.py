@@ -33,6 +33,13 @@ for entry in data:
     published_ts = dt.timestamp
     published_date = dt.date().strftime('%Y-%m-%d')
 
+    # If the datetime indicates midnight, default it to the current time, at
+    # least it will be closer to accurate since we check every 30 minutes
+    if dt.hour == 0 and dt.minute == 0:
+        print 'Overriding timestamp'
+        date_utc = arrow.utcnow()
+        published_ts = date_utc.timestamp
+
     pcollid = entry['pcollid']
 
     if entry['tags']:
