@@ -34,6 +34,8 @@ def get_source_url(source):
         return 'http://blogs.seattletimes.com/today/category/weather-beat/'
     elif source == 'Science Daily':
         return 'http://feeds.sciencedaily.com/sciencedaily/earth_climate/weather'
+    elif source == 'Weather 5280':
+        return 'http://www.weather5280.com'
     else:
         return '#'
 
