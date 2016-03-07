@@ -24,8 +24,7 @@ for entry in feed.entries:
     summary = entry.summary
 
     if headline.startswith('The State of the Atmosphere'):
-        print 'Skipping SOTA story'
-        continue
+        headline = "(Denver) %s" % headline
 
     # See if we already have this story
     try:
